@@ -4,15 +4,14 @@ require('dotenv').config();
 const registerStudent = async(req, res) => {
     const { stuName, stuAge, stuContact } = req.body;
 
-    let query = "INSERT INTO students (stuName, stuAge, stuContact) VALUES(?,?,?,)";
-    let values = [stuName, stuAge, stuContact];
+    try{
+        const sql = "INSERT INTO students (stuName, stuAge, stuContact) VALUES(?,?,?,)";
 
-    try {
-        await pool.query(query, values);
-        res.status(200).json({ message: 'Student registered successfully!' });
-    } catch (err) {
+        const result = await db.execute(sql,[stuName, stuAge, stuContact]);
+        res.status(200).jason({message: "Student Registered Successfully..!"})
+    } catch(err) {
         console.error(err.message);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({message: "Registration Failed..!"})
     }
 };
 
@@ -32,6 +31,5 @@ const registerGuardian = async (req, res) => {
 };
 
 module.exports = {
-    registerGuardian, 
     registerStudent
 };
